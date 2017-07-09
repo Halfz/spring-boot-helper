@@ -1,7 +1,6 @@
 #/bin/bash
-ver=${1:-1.7.1}
-#wget https://github.com/scouter-project/scouter/releases/download/v$(1)/scouter-all-$(1).tar.gz
-#tar xvzf scouter-all-$(1).tar.gz
+wget https://github.com/scouter-project/scouter/releases/download/v1.7.1/scouter-all-1.7.1.tar.gz
+tar xvzf scouter-all-$(1).tar.gz
 mkdir -p $HOME/data/scouterdb
 cat <<EOF > scouter/server/conf/scouter.conf
 # Agent Control and Service Port(Default : TCP 6100)
