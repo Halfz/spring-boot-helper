@@ -22,4 +22,3 @@ JAVA_OPTS=
 JAVA_OPTS=" ${JAVA_OPTS} -javaagent:$(pwd)/scouter/agent.java/scouter.agent.jar"
 JAVA_OPTS=" ${JAVA_OPTS} -Dobj_name=$1"
 EOF
-service $1 start
