@@ -12,7 +12,5 @@ db_dir=$HOME/data/scouterdb
 # Log directory(Default : ./logs)
 log_dir=$HOME/logs
 EOF
-sudo ln -s ./scouter/server/startup.sh /etc/init.d/scouter
-sudo service scouter start
-sudo ln -s ./scouter/agent.host/host.sh /etc/init.d/scouter-host
-sudo service scouter-host start
+./scouter/server/startup.sh
+./scouter/agent.host/host.sh

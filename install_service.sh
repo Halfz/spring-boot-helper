@@ -9,7 +9,6 @@ fi
 uname=$(id -u -n)
 gname=$(id -g -n)
 sudo ln -s $1.jar /etc/init.d/$1
-sudo service $1 start
 chown $uname:$gname $1.jar
 chmod 500 $1.jar
 mkdir -p $HOME/pids
@@ -22,3 +21,4 @@ JAVA_OPTS=
 JAVA_OPTS=" ${JAVA_OPTS} -javaagent:$(pwd)/scouter/agent.java/scouter.agent.jar"
 JAVA_OPTS=" ${JAVA_OPTS} -Dobj_name=$1"
 EOF
+sudo service $1 start
