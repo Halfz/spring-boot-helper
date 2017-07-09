@@ -1,6 +1,7 @@
 #/bin/bash
 if [ ! -f scouter-all-1.7.1.tar.gz ]; then
-  wget https://github.com/scouter-project/scouter/releases/download/v1.7.1/scouter-all-1.7.1.tar.gz
+  # wget https://github.com/scouter-project/scouter/releases/download/v1.7.1/scouter-all-1.7.1.tar.gz
+  wget -O scouter-all-1.7.1.tar.gz  "https://drive.google.com/uc?export=download&id=0B5XgPksl3sfPbWJDSG9Vejh4ZTg"
   tar xvzf scouter-all-1.7.1.tar.gz
 fi
 mkdir -p $HOME/app-data
@@ -15,5 +16,4 @@ db_dir=$HOME/app-data/scouterdb
 # Log directory(Default : ./logs)
 log_dir=$HOME/logs
 EOF
-./scouter/server/startup.sh
-./scouter/agent.host/host.sh
+./run_scouter.sh
