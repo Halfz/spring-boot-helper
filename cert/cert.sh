@@ -1,33 +1,35 @@
 #/bin/bash
 
-if [ "$#" -eq 1 ]
+if [ "$#" -eq 2 ]
 then
-   echo "create ssl certification for domain: $1"
+   echo "create ssl certification for domain: $1 internal-port: $2"
 else
-   echo "Usage: ./cert.sh <domain>"
+   echo "Usage: ./cert.sh <domain> <internal-port>"
    exit 1
 fi
-wget https://dl.eff.org/certbot-auto
+wget -O certbot-auto https://dl.eff.org/certbot-auto
 chmod a+x certbot-auto
-sudo mkdir /home/www
-sudo mkdir /home/www/.well-known
+sudo mkdir -p /home/www
+sudo mkdir -p /home/www/.well-known
 sudo chown -R nginx:nginx /home/www
-sudo chmod 755 /home/www
-cat <<EOF >> /etc/nginx/conf.d/certbot.conf
+sudo chmod -R 755 /home/www
+cat <<EOF > /etc/nginx/conf.d/certbot.conf
 server {
       listen 80 default_server;
       location /.well-known {
          allow all;
          alias /home/www/.well-known/;
-         try_files $uri /dev/null =404;
       }
 }
 EOF
-./apps/certbot-auto certonly --webroot -w /home/www -d $1
+sudo service nginx restart
+sudo yum -y install yum-utils
+sudo yum-config-manager --enable rhui-REGION-rhel-server-extras rhui-REGION-rhel-server-optional
+./certbot-auto certonly --webroot -w /home/www -d $1
 CMD="0 6 * * * /home/halfz/apps/certbot-auto renew --text >> /home/halfz/logs/certbot-cron.log && sudo service nginx reload"
 (crontab -l ; echo "$CMD") 2>&1 | grep -v "no crontab" | grep -v "$CMD" |  sort | uniq | crontab -
 
-cat <<EOF >> /etc/nginx/conf.d/$1.conf
+cat <<EOF > /etc/nginx/conf.d/$1.conf
 
   server {
     listen       443 ssl;
@@ -40,14 +42,14 @@ cat <<EOF >> /etc/nginx/conf.d/$1.conf
     # allow large uploads of files
     client_max_body_size 1G;
     location / {
-      proxy_pass      http://127.0.0.1:8080;
+      proxy_pass      http://127.0.0.1:$2;
       proxy_http_version 1.1;
       proxy_set_header Connection "";
-      proxy_set_header Host $host;
-      proxy_set_header X-Real-IP $remote_addr;
-      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host \$host;
+      proxy_set_header X-Real-IP \$remote_addr;
+      proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
       proxy_set_header X-Forwarded-Proto "https";
-      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Upgrade \$http_upgrade;
       proxy_set_header Connection "Upgrade";
       proxy_connect_timeout 600;
       proxy_send_timeout 600;

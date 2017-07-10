@@ -6,7 +6,7 @@ if [ ! -f scouter-all-1.7.1.tar.gz ]; then
 fi
 mkdir -p $HOME/app-data
 mkdir -p $HOME/app-data/scouterdb
-cat <<EOF > scouter/server/conf/scouter.conf
+cat <<EOF > scouter.conf
 # Agent Control and Service Port(Default : TCP 6100)
 net_tcp_listen_port=6100
 # UDP Receive Port(Default : 6100)
