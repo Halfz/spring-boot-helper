@@ -18,7 +18,6 @@ cat <<EOF > $1.conf
 PID_FOLDER=$HOME/pids
 LOG_FOLDER=$HOME/logs
 RUN_ARGS=$2
-JAVA_OPTS=
-JAVA_OPTS=" ${JAVA_OPTS} -javaagent:$(pwd)/scouter/agent.java/scouter.agent.jar"
-JAVA_OPTS=" ${JAVA_OPTS} -Dobj_name=$1"
+JAVA_OPTS=" \${JAVA_OPTS} -javaagent:$(pwd)/scouter/agent.java/scouter.agent.jar"
+JAVA_OPTS=" \${JAVA_OPTS} -Dobj_name=$1"
 EOF
